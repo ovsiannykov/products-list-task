@@ -3,6 +3,7 @@ const reactHooksPlugin = require('eslint-plugin-react-hooks')
 const typescriptEslintPlugin = require('@typescript-eslint/eslint-plugin')
 const typescriptEslintParser = require('@typescript-eslint/parser')
 const prettierPlugin = require('eslint-plugin-prettier')
+const tanstackQueryPlugin = require('@tanstack/eslint-plugin-query')
 const importPlugin = require('eslint-plugin-import')
 
 module.exports = [
@@ -21,6 +22,7 @@ module.exports = [
       'react-hooks': reactHooksPlugin,
       '@typescript-eslint': typescriptEslintPlugin,
       prettier: prettierPlugin,
+      '@tanstack/query': tanstackQueryPlugin,
       import: importPlugin,
     },
     settings: {
@@ -32,6 +34,7 @@ module.exports = [
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...typescriptEslintPlugin.configs.recommended.rules,
+      ...tanstackQueryPlugin.configs.recommended.rules,
       'prettier/prettier': 'error',
       'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
