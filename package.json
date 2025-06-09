@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "dev": "react-native start --reset-cache",
+    "pods": "cd ios && pod install --repo-update",
+    "android": "react-native run-android --mode=debug --terminal terminal",
+    "android-release": "react-native run-android --mode=release --terminal terminal",
+    "ios": "npx react-native run-ios --mode Debug --terminal terminal",
+    "ios-release": "npx react-native run-ios --mode Release --terminal terminal",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
