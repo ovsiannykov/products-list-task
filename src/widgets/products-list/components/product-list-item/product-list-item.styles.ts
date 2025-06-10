@@ -20,4 +20,17 @@ export default StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
   },
+  action_container: {
+    position: 'absolute',
+    right: 0,
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
+  },
+  action_button: {
+    width: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
 })

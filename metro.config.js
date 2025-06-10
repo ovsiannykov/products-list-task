@@ -1,5 +1,8 @@
 const path = require('path')
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
+const {
+  wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config')
 
 const projectRoot = __dirname
 
@@ -87,8 +90,8 @@ const config = {
       'woff2',
       'ttf',
       'otf',
-    ].filter((ext) => ext !== 'svg'), // Add common asset extensions here as needed and filter 'svg'
-    sourceExts: ['js', 'jsx', 'ts', 'tsx', 'json', 'mjs', 'cjs', 'svg'], // Ensure 'svg' is here
+    ].filter((ext) => ext !== 'svg'),
+    sourceExts: ['js', 'jsx', 'ts', 'tsx', 'json', 'mjs', 'cjs', 'svg'],
   },
   transformer: {
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
@@ -96,4 +99,6 @@ const config = {
   watchFolders: [path.resolve(projectRoot, 'src')],
 }
 
-module.exports = mergeConfig(getDefaultConfig(projectRoot), config)
+module.exports = wrapWithReanimatedMetroConfig(
+  mergeConfig(getDefaultConfig(projectRoot), config)
+)

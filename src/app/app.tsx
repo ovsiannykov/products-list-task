@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import { Toaster } from '@features/toaster'
 import { HomeNavigator } from '@navigation/home-navigator'
@@ -12,10 +13,12 @@ export const App = () => {
   return (
     <ErrorProvider error={null}>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <HomeNavigator />
-          <Toaster />
-        </NavigationContainer>
+        <GestureHandlerRootView>
+          <NavigationContainer>
+            <HomeNavigator />
+            <Toaster />
+          </NavigationContainer>
+        </GestureHandlerRootView>
       </QueryClientProvider>
     </ErrorProvider>
   )
