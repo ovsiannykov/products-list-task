@@ -23,6 +23,12 @@
       "name": "Яблоки",
       "amount": 1,
       "bought": false
+    },
+    {
+      "id": "5",
+      "name": "Сир",
+      "amount": 1,
+      "bought": false
     }
   ]
 }
