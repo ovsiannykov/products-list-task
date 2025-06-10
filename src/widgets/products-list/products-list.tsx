@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
-import { FlatList, RefreshControl, Text, View } from 'react-native'
+import React, { useCallback } from 'react'
+import { FlatList, ListRenderItem, RefreshControl, Text } from 'react-native'
 
-import { useProducts, useProductsStore } from '@entities/product'
+import { TProduct, useProducts, useProductsStore } from '@entities/product'
+
+import { ProductListItem } from './components'
 
 export const ProductsList = () => {
   const { getProducts } = useProducts()
   const { products } = useProductsStore()
-
   const { refetch, isFetching } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
@@ -18,6 +19,13 @@ export const ProductsList = () => {
     refetchOnWindowFocus: false,
   })
 
+  const keyExtractor = useCallback((item: TProduct) => item.id, [])
+
+  const renderItem: ListRenderItem<TProduct> = useCallback(
+    ({ item }) => <ProductListItem product={item} />,
+    []
+  )
+
   if (!products?.length) {
     return <Text style={{ color: 'white' }}>No products found</Text>
   }
@@ -25,14 +33,8 @@ export const ProductsList = () => {
   return (
     <FlatList
       data={products}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <View style={{ padding: 12, borderBottomWidth: 1 }}>
-          <Text>{item.name}</Text>
-          <Text>Amount: {item.amount}</Text>
-          <Text>Bought: {item.bought ? '✅' : '❌'}</Text>
-        </View>
-      )}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
       refreshControl={
         <RefreshControl
           refreshing={isFetching}
