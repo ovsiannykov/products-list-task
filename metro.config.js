@@ -1,7 +1,7 @@
-const path = require('path');
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const path = require('path')
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 
-const projectRoot = __dirname;
+const projectRoot = __dirname
 
 const extraNodeModules = {
   '@app': path.resolve(projectRoot, 'src/app'),
@@ -11,13 +11,89 @@ const extraNodeModules = {
   '@features': path.resolve(projectRoot, 'src/features'),
   '@entities': path.resolve(projectRoot, 'src/entities'),
   '@navigation': path.resolve(projectRoot, 'src/navigation'),
-};
+}
 
 const config = {
   resolver: {
     extraNodeModules,
+    assetExts: [
+      'png',
+      'jpg',
+      'jpeg',
+      'gif',
+      'bmp',
+      'tiff',
+      'webp',
+      'mp4',
+      'mov',
+      'avi',
+      'flv',
+      'wmv',
+      'mkv',
+      'webm',
+      'mpeg',
+      '3gp',
+      'mp3',
+      'wav',
+      'aac',
+      'ogg',
+      'oga',
+      'opus',
+      'flac',
+      'json',
+      'txt',
+      'pdf',
+      'doc',
+      'docx',
+      'xls',
+      'xlsx',
+      'ppt',
+      'pptx',
+      'zip',
+      'rar',
+      'tar',
+      'gz',
+      '7z',
+      'apk',
+      'ipa',
+      'bin',
+      'dat',
+      'db',
+      'iso',
+      'jar',
+      'exe',
+      'msi',
+      'dmg',
+      'toast',
+      'vcd',
+      'log',
+      'key',
+      'pem',
+      'crt',
+      'cer',
+      'pfx',
+      'p12',
+      'csr',
+      'der',
+      'config',
+      'properties',
+      'yaml',
+      'yml',
+      'env',
+      'ini',
+      'md',
+      'xml',
+      'woff',
+      'woff2',
+      'ttf',
+      'otf',
+    ].filter((ext) => ext !== 'svg'), // Add common asset extensions here as needed and filter 'svg'
+    sourceExts: ['js', 'jsx', 'ts', 'tsx', 'json', 'mjs', 'cjs', 'svg'], // Ensure 'svg' is here
+  },
+  transformer: {
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
   watchFolders: [path.resolve(projectRoot, 'src')],
-};
+}
 
-module.exports = mergeConfig(getDefaultConfig(projectRoot), config);
+module.exports = mergeConfig(getDefaultConfig(projectRoot), config)
