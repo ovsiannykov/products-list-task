@@ -5,6 +5,7 @@ import SwipeableItem, {
 } from 'react-native-swipeable-item'
 
 import { TProduct } from '@entities/product'
+import { useDeleteProduct } from '@features/product'
 import { COLORS } from '@shared/constants/theme'
 
 import CheckSvg from './assets/check.svg'
@@ -16,10 +17,16 @@ type TProductItemProps = {
 }
 
 export const ProductListItem = memo(({ product }: TProductItemProps) => {
+  const { deleteProduct } = useDeleteProduct()
   const swipeableRef = useRef<SwipeableItemImperativeRef>(null)
 
   const closeTab = () => {
     swipeableRef.current?.close()
+  }
+
+  const deleteProductHandler = () => {
+    deleteProduct(product.id)
+    closeTab()
   }
 
   const ActionsButtons = useCallback(() => {
@@ -27,7 +34,7 @@ export const ProductListItem = memo(({ product }: TProductItemProps) => {
       <View style={styles.action_container}>
         <TouchableOpacity
           style={{ ...styles.action_button, backgroundColor: COLORS.error }}
-          onPress={closeTab}
+          onPress={deleteProductHandler}
         >
           <TrashSvg width={24} height={24} />
         </TouchableOpacity>

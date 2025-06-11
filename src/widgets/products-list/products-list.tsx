@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { useCallback } from 'react'
-import { FlatList, ListRenderItem, RefreshControl, Text } from 'react-native'
+import { FlatList, ListRenderItem, RefreshControl } from 'react-native'
 
 import { TProduct, useProducts, useProductsStore } from '@entities/product'
 
-import { ProductListItem } from './components'
+import { COLORS } from '@shared/constants'
+
+import { EmptyScreen, ProductListItem } from './components'
 
 export const ProductsList = () => {
   const { getProducts } = useProducts()
@@ -26,21 +28,18 @@ export const ProductsList = () => {
     []
   )
 
-  if (!products?.length) {
-    return <Text style={{ color: 'white' }}>No products found</Text>
-  }
-
   return (
     <FlatList
       data={products}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
+      ListEmptyComponent={<EmptyScreen />}
       refreshControl={
         <RefreshControl
           refreshing={isFetching}
           onRefresh={refetch}
-          colors={['white']}
-          tintColor="white"
+          colors={[COLORS.white]}
+          tintColor={COLORS.white}
         />
       }
     />
