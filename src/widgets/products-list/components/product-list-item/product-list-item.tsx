@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useCallback, useRef } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import SwipeableItem, {
@@ -8,6 +9,8 @@ import { TProduct, useProducts, useProductsStore } from '@entities/product'
 import { useDeleteProduct } from '@features/product'
 import { COLORS } from '@shared/constants/theme'
 
+import { THomeScreenNavigationProp } from '@shared/types'
+
 import CheckSvg from './assets/check.svg'
 import TrashSvg from './assets/trash.svg'
 import styles from './product-list-item.styles'
@@ -17,14 +20,21 @@ type TProductItemProps = {
 }
 
 export const ProductListItem = ({ product }: TProductItemProps) => {
+  const navigation = useNavigation<THomeScreenNavigationProp>()
   const { updateProduct } = useProducts()
   const { deleteProduct } = useDeleteProduct()
   const storeProduct = useProductsStore((state) =>
     state.products.find((p) => p.id === product.id)
   )
   const swipeableRef = useRef<SwipeableItemImperativeRef>(null)
+  const productToDisplay = storeProduct ?? product
 
   const closeTab = () => swipeableRef.current?.close()
+
+  const goToEditProduct = (product: TProduct) => {
+    closeTab()
+    navigation.navigate('CREATE_PRODUCT', { product })
+  }
 
   const deleteProductHandler = () => {
     deleteProduct(product.id)
@@ -65,8 +75,6 @@ export const ProductListItem = ({ product }: TProductItemProps) => {
     [storeProduct]
   )
 
-  const productToDisplay = storeProduct ?? product
-
   return (
     <SwipeableItem
       ref={swipeableRef}
@@ -75,7 +83,7 @@ export const ProductListItem = ({ product }: TProductItemProps) => {
       snapPointsLeft={[160]}
     >
       <TouchableOpacity
-        onPress={closeTab}
+        onPress={() => goToEditProduct(productToDisplay)}
         style={{
           ...styles.product_item,
           borderColor: COLORS.stroke,

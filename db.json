@@ -1,58 +1,22 @@
 {
   "products": [
     {
-      "id": "1",
       "name": "Молоко",
-      "amount": 1,
-      "bought": false
+      "amount": 434,
+      "bought": false,
+      "id": "1"
     },
     {
-      "id": "2",
       "name": "Хлеб",
+      "amount": 2,
+      "bought": false,
+      "id": "2"
+    },
+    {
+      "name": "Rerer",
       "amount": 1,
-      "bought": false
-    },
-    {
-      "id": "3",
-      "name": "Яйца",
-      "amount": 1,
-      "bought": true
-    },
-    {
-      "id": "4",
-      "name": "Яблоки",
-      "amount": 1,
-      "bought": false
-    },
-    {
-      "id": "513d",
-      "name": "Sous",
-      "amount": 3,
-      "bought": false
-    },
-    {
-      "id": "05b4",
-      "name": "Rabbit",
-      "amount": 1,
-      "bought": false
-    },
-    {
-      "id": "0a43",
-      "name": "Горох",
-      "amount": 1,
-      "bought": false
-    },
-    {
-      "id": "34a2",
-      "name": "Чипсы",
-      "amount": 4,
-      "bought": true
-    },
-    {
-      "id": "4d73",
-      "name": "Salat",
-      "amount": 1,
-      "bought": false
+      "bought": false,
+      "id": "3tK3yPZsx6wSOUdy"
     }
   ]
 }

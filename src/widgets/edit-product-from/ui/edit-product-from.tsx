@@ -7,21 +7,29 @@ import { Text, View } from 'react-native'
 import { z } from 'zod'
 
 import { TProduct, useProducts } from '@entities/product'
+import { useErrorContext } from '@shared/core'
+import { generateRandomId } from '@shared/helpers'
 import { BackButton, Button, Input, Switch } from '@shared/ui'
 
 import { productSchema } from '../model'
 import styles from './edit-product-from.styles'
 
 type FormValues = z.infer<typeof productSchema>
+type TEditProductFormProps = {
+  product?: TProduct
+}
 
-export const EditProductForm = () => {
+export const EditProductForm = ({ product }: TEditProductFormProps) => {
+  const { bug } = useErrorContext()
   const navigation = useNavigation()
   const { goBack } = navigation
-  const { addProduct } = useProducts()
+  const { addProduct, updateProduct } = useProducts()
+  const isEditMode = !!product
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={goBack} />,
+      title: isEditMode ? 'Edit product' : 'Create product',
     })
   }, [])
 
@@ -29,47 +37,72 @@ export const EditProductForm = () => {
     control,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: '',
-      amount: 1,
-      bought: false,
+      name: product?.name ?? '',
+      amount: product?.amount ?? 1,
+      bought: product?.bought ?? false,
     },
   })
 
   const { mutateAsync } = useMutation({
-    mutationFn: (data: Omit<TProduct, 'id'>) => addProduct(data),
+    mutationFn: async (data: TProduct) => {
+      if (isEditMode && product) {
+        await updateProduct({ ...data, id: product.id })
+      } else {
+        await addProduct(data)
+      }
+    },
   })
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await mutateAsync(data)
-    setValue('name', '')
-    setValue('amount', 1)
-    setValue('bought', false)
+    await mutateAsync({ ...data, id: product?.id ?? generateRandomId() })
+    if (!isEditMode) {
+      setValue('name', '')
+      setValue('amount', 1)
+      setValue('bought', false)
+    }
     goBack()
   }
 
   return (
     <View>
-      <Input
-        label="Name"
-        value={watch('name')}
-        onChange={(text: string) => setValue('name', text)}
-        error={errors.name?.message}
-        style={styles.form_input}
-        placeholder="Enter product name"
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label="Name"
+            value={value}
+            onChange={onChange}
+            error={errors.name?.message}
+            style={styles.form_input}
+            placeholder="Enter product name"
+          />
+        )}
       />
-
-      <Input
-        label="Amount"
-        value={String(watch('amount'))}
-        onChange={(text: string) => setValue('amount', Number(text))}
-        keyboardType="numeric"
-        error={errors.amount?.message}
-        placeholder="Enter amount"
+      <Controller
+        control={control}
+        name="amount"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label="Amount"
+            value={value === 0 ? '' : value?.toString()}
+            onChange={(text: string) => {
+              if (/^\d*$/.test(text)) {
+                onChange(text === '' ? 0 : parseInt(text, 10))
+              } else {
+                bug('Amount must be a number')
+                onChange(0)
+              }
+            }}
+            keyboardType="numeric"
+            error={errors.amount?.message}
+            placeholder="Enter amount"
+          />
+        )}
       />
 
       <View style={styles.switch_container}>
@@ -87,7 +120,7 @@ export const EditProductForm = () => {
       </View>
 
       <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
-        Add Product
+        {isEditMode ? 'Update Product' : 'Add Product'}
       </Button>
     </View>
   )

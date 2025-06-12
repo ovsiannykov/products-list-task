@@ -3,18 +3,16 @@ import React, { useEffect } from 'react'
 import { SafeAreaView, TouchableOpacity } from 'react-native'
 
 import { COLORS, HIT_SLOP_10 } from '@shared/constants'
+import { THomeScreenNavigationProp } from '@shared/types'
 import { ProductsList } from '@widgets/products-list'
 
 import PlusIcon from './assets/plus-icon.svg'
 import styles from './home-screen.styles'
 
 export const HomeScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<THomeScreenNavigationProp>()
 
   const goToAddProduct = () => {
-    // #Todo: add types for navigation
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     navigation.navigate('CREATE_PRODUCT')
   }
 

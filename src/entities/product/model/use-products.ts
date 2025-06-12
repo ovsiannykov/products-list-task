@@ -70,7 +70,7 @@ export const useProducts = () => {
   )
 
   const addProduct = useCallback(
-    async (data: Omit<TProduct, 'id'>) => {
+    async (data: TProduct) => {
       const [err, newProduct] = await to(addProductRequest(data))
 
       if (err || !newProduct) {

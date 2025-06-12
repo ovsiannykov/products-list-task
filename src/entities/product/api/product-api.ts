@@ -9,7 +9,7 @@ export const getProductsRequest = async (): Promise<TProduct[]> => {
 }
 
 export const addProductRequest = async (
-  product: Omit<TProduct, 'id'>
+  product: TProduct
 ): Promise<TProduct> => {
   const res = await api.post<TProduct>('/products', product)
 
