@@ -47,6 +47,12 @@
       "name": "Чипсы",
       "amount": 4,
       "bought": true
+    },
+    {
+      "id": "4d73",
+      "name": "Salat",
+      "amount": 1,
+      "bought": false
     }
   ]
 }

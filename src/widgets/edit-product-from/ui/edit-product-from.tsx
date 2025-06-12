@@ -49,6 +49,7 @@ export const EditProductForm = () => {
     setValue('name', '')
     setValue('amount', 1)
     setValue('bought', false)
+    goBack()
   }
 
   return (

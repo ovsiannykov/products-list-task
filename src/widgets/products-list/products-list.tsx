@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FlatList, ListRenderItem, RefreshControl } from 'react-native'
 
 import { TProduct, useProducts, useProductsStore } from '@entities/product'
@@ -10,6 +10,10 @@ export const ProductsList = () => {
   const { getProducts } = useProducts()
   const { products } = useProductsStore()
   const [refreshing, setRefreshing] = useState(false)
+
+  useEffect(() => {
+    getProducts()
+  }, [getProducts])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true)
