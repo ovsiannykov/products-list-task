@@ -23,6 +23,30 @@
       "name": "Яблоки",
       "amount": 1,
       "bought": false
+    },
+    {
+      "id": "513d",
+      "name": "Sous",
+      "amount": 3,
+      "bought": false
+    },
+    {
+      "id": "05b4",
+      "name": "Rabbit",
+      "amount": 1,
+      "bought": false
+    },
+    {
+      "id": "0a43",
+      "name": "Горох",
+      "amount": 1,
+      "bought": false
+    },
+    {
+      "id": "34a2",
+      "name": "Чипсы",
+      "amount": 4,
+      "bought": true
     }
   ]
 }

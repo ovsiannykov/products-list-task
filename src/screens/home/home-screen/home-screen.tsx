@@ -1,11 +1,33 @@
-import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import React, { useEffect } from 'react'
+import { SafeAreaView, TouchableOpacity } from 'react-native'
 
+import { COLORS, HIT_SLOP_10 } from '@shared/constants'
 import { ProductsList } from '@widgets/products-list'
 
+import PlusIcon from './assets/plus-icon.svg'
 import styles from './home-screen.styles'
 
 export const HomeScreen = () => {
+  const navigation = useNavigation()
+
+  const goToAddProduct = () => {
+    // #Todo: add types for navigation
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    navigation.navigate('CREATE_PRODUCT')
+  }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity hitSlop={HIT_SLOP_10} onPress={goToAddProduct}>
+          <PlusIcon width={24} height={24} fill={COLORS.white} />
+        </TouchableOpacity>
+      ),
+    })
+  }, [])
+
   return (
     <SafeAreaView style={styles.screen}>
       <ProductsList />
