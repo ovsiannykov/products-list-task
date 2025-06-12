@@ -13,7 +13,7 @@ import { useProductsStore } from './products-store'
 
 export const useProducts = () => {
   const { bug, success } = useErrorContext()
-  const { setProducts, products } = useProductsStore()
+  const setProducts = useProductsStore((state) => state.setProducts)
 
   const getProductsErrorTitle = 'Oops... Failed to get products'
   const deleteProductErrorTitle = 'Oops... Failed to delete product'
@@ -27,25 +27,24 @@ export const useProducts = () => {
         return bug(getProductsErrorTitle)
       }
 
-      if (products.length) {
-        setProducts(products)
-      }
+      setProducts(products)
     } catch {
       bug(getProductsErrorTitle)
     }
-  }, [])
+  }, [setProducts])
 
   const deleteProduct = useCallback(
     async (id: string) => {
       try {
         await deleteProductRequest(id)
-        setProducts(products?.filter((product) => product.id !== id))
+        const currentProducts = useProductsStore.getState().products
+        setProducts(currentProducts.filter((product) => product.id !== id))
         success('Product deleted successfully')
       } catch {
         bug(deleteProductErrorTitle)
       }
     },
-    [getProducts]
+    [setProducts]
   )
 
   const updateProduct = useCallback(
@@ -55,16 +54,19 @@ export const useProducts = () => {
       )
 
       if (err || !updatedProduct) {
-        return bug(updateProductErrorTitle)
+        bug(updateProductErrorTitle)
+
+        return
       }
 
-      setProducts(
-        products.map((product) =>
-          product.id === updatedProduct.id ? updatedProduct : product
-        )
+      const currentProducts = useProductsStore.getState().products
+      const newProducts = currentProducts.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
       )
+
+      setProducts(newProducts)
     },
-    [getProducts]
+    [setProducts]
   )
 
   return {

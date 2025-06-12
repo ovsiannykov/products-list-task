@@ -17,6 +17,12 @@
       "name": "Яйца",
       "amount": 1,
       "bought": true
+    },
+    {
+      "id": "4",
+      "name": "Яблоки",
+      "amount": 1,
+      "bought": false
     }
   ]
 }

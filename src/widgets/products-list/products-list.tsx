@@ -1,9 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FlatList, ListRenderItem, RefreshControl } from 'react-native'
 
 import { TProduct, useProducts, useProductsStore } from '@entities/product'
-
 import { COLORS } from '@shared/constants'
 
 import { EmptyScreen, ProductListItem } from './components'
@@ -11,15 +9,13 @@ import { EmptyScreen, ProductListItem } from './components'
 export const ProductsList = () => {
   const { getProducts } = useProducts()
   const { products } = useProductsStore()
-  const { refetch, isFetching } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => {
-      await getProducts()
+  const [refreshing, setRefreshing] = useState(false)
 
-      return []
-    },
-    refetchOnWindowFocus: false,
-  })
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await getProducts()
+    setRefreshing(false)
+  }, [getProducts])
 
   const keyExtractor = useCallback((item: TProduct) => item.id, [])
 
@@ -36,8 +32,8 @@ export const ProductsList = () => {
       ListEmptyComponent={<EmptyScreen />}
       refreshControl={
         <RefreshControl
-          refreshing={isFetching}
-          onRefresh={refetch}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           colors={[COLORS.white]}
           tintColor={COLORS.white}
         />
