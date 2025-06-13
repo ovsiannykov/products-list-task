@@ -2,6 +2,13 @@
 
 This is a [**React Native**](https://reactnative.dev) test task project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+## User Stories Covered
+
+- ✅ View grocery list
+- ✅ Add, edit, and delete items
+- ✅ Assign amount to items
+- ✅ Mark items as bought (with checkbox and strikethrough)
+
 ## What's configured?
 
 - **[FSD Architecture](https://feature-sliced.design/)**
