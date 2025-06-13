@@ -3,13 +3,16 @@ import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
 import React, { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { z } from 'zod'
 
 import { TProduct, useProducts } from '@entities/product'
+import { useDeleteProduct } from '@features/product'
 import { useErrorContext } from '@shared/core'
 import { generateRandomId } from '@shared/helpers'
 import { BackButton, Button, Input, Switch } from '@shared/ui'
+
+import TrashSvg from '../assets/trash.svg'
 
 import { productSchema } from '../model'
 import styles from './edit-product-from.styles'
@@ -24,12 +27,29 @@ export const EditProductForm = ({ product }: TEditProductFormProps) => {
   const navigation = useNavigation()
   const { goBack } = navigation
   const { addProduct, updateProduct } = useProducts()
+  const { deleteProduct } = useDeleteProduct()
   const isEditMode = !!product
+
+  const deleteProductHandler = async () => {
+    if (!product) {
+      return
+    }
+
+    await deleteProduct(product.id)
+    goBack()
+  }
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={goBack} />,
       title: isEditMode ? 'Edit product' : 'Create product',
+      headerRight: isEditMode
+        ? () => (
+            <TouchableOpacity onPress={deleteProductHandler}>
+              <TrashSvg width={24} height={24} />
+            </TouchableOpacity>
+          )
+        : undefined,
     })
   }, [])
 
@@ -105,19 +125,21 @@ export const EditProductForm = ({ product }: TEditProductFormProps) => {
         )}
       />
 
-      <View style={styles.switch_container}>
-        <Text style={styles.switch_title}>Already purchased:</Text>
-        <Controller
-          control={control}
-          name="bought"
-          render={({ field: { value, onChange } }) => (
-            <Switch
-              isOn={value ?? false}
-              handleToggle={() => onChange(!value)}
-            />
-          )}
-        />
-      </View>
+      {isEditMode && (
+        <View style={styles.switch_container}>
+          <Text style={styles.switch_title}>Already purchased:</Text>
+          <Controller
+            control={control}
+            name="bought"
+            render={({ field: { value, onChange } }) => (
+              <Switch
+                isOn={value ?? false}
+                handleToggle={() => onChange(!value)}
+              />
+            )}
+          />
+        </View>
+      )}
 
       <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
         {isEditMode ? 'Update Product' : 'Add Product'}
